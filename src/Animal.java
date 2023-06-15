@@ -1,4 +1,4 @@
-abstract class Animal {
+public abstract class Animal {
     private String nome;
     private int idade;
     private String cor;
@@ -8,8 +8,6 @@ abstract class Animal {
         this.idade = idade;
         this.cor = cor;
     }
-
-    public abstract void emitirSom();
 
     public String getNome() {
         return nome;
@@ -23,19 +21,4 @@ abstract class Animal {
         return cor;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
-    public void setCor(String cor) {
-        this.cor = cor;
-    }
-
-    public void dormir() {
-        System.out.println("O animal está dormindo.");
-    }
 }
