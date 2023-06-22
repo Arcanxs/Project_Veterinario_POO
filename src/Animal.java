@@ -20,5 +20,11 @@ public abstract class Animal {
     public String getCor() {
         return cor;
     }
+    
 
+    public abstract void emitirSom();
+
+    public String getApelido(){
+        return nome;
+    }
 }

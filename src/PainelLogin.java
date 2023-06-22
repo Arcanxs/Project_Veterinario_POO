@@ -12,7 +12,7 @@ public class PainelLogin extends JFrame {
     public PainelLogin() {
         
         setTitle("Sistema de Resgate Animal");
-        setSize(300, 200);
+        setSize(340, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -63,11 +63,19 @@ public class PainelLogin extends JFrame {
             return;
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(NOME_ARQUIVO, true))) {
+        try  {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(NOME_ARQUIVO, true));
+            if(nomeUsuario.length() == 0 || senha.length() == 0){
+                writer.close();
+                throw new CadastroException("Nome ou Senha Inválidos!");
+            }
             // Grava os dados de usuário no arquivo
             writer.write(nomeUsuario + "," + senha);
             writer.newLine();
+            writer.close();
             JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
+        } catch(CadastroException e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar o cadastro. Tente novamente.");
         }

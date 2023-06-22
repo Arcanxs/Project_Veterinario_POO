@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class TelaAnimais extends JFrame {
     private static final String NOME_ARQUIVO = "animaiscadastrados.txt";
-    private ArrayList<Animal> animaisCadastrados;
+    private ArrayList<Animal> animaisCadastrados = new ArrayList<>();
 
     public TelaAnimais() {
         setTitle("Cadastro de Animais");
@@ -38,7 +38,6 @@ public class TelaAnimais extends JFrame {
 
         add(painel);
 
-        animaisCadastrados = new ArrayList<>();
         carregarAnimaisDoArquivo();
     }
 
@@ -67,6 +66,7 @@ public class TelaAnimais extends JFrame {
                 animal = new Gato(nome, idade, cor);
             }
 
+            animal.emitirSom();
             animaisCadastrados.add(animal);
             salvarAnimaisNoArquivo();
             JOptionPane.showMessageDialog(this, "Animal resgatado com sucesso!");
@@ -85,7 +85,7 @@ public class TelaAnimais extends JFrame {
     } else {
         String[] opcoesAnimais = new String[animaisCadastrados.size()];
         for (int i = 0; i < animaisCadastrados.size(); i++) {
-            opcoesAnimais[i] = animaisCadastrados.get(i).getNome();
+            opcoesAnimais[i] = animaisCadastrados.get(i).getApelido();
         }
 
         String animalSelecionado = (String) JOptionPane.showInputDialog(this,
@@ -107,7 +107,7 @@ public class TelaAnimais extends JFrame {
 
     private Animal buscarAnimalPorNome(String nome) {
          for (Animal animal : animaisCadastrados) {
-             if (animal.getNome().equals(nome)) {
+             if (animal.getApelido().equals(nome)) {
                  return animal;
         }
     }
@@ -116,7 +116,7 @@ public class TelaAnimais extends JFrame {
 
     private void exibirDetalhesAnimal(Animal animal) {
         StringBuilder mensagem = new StringBuilder("Detalhes do animal:\n");
-             mensagem.append("Nome: ").append(animal.getNome()).append("\n");
+             mensagem.append("Nome: ").append(animal.getApelido()).append("\n");
              mensagem.append("Idade: ").append(animal.getIdade()).append(" anos\n");
              mensagem.append("Cor: ").append(animal.getCor());
              
@@ -126,7 +126,7 @@ public class TelaAnimais extends JFrame {
     private void salvarAnimaisNoArquivo() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(NOME_ARQUIVO))) {
             for (Animal animal : animaisCadastrados) {
-                writer.write(animal.getNome() + "," + animal.getIdade() + "," + animal.getCor());
+                writer.write(animal.getApelido() + "," + animal.getIdade() + "," + animal.getCor() + "," + animal.getClass().getName());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -139,12 +139,19 @@ public class TelaAnimais extends JFrame {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 String[] dados = linha.split(",");
-                if (dados.length == 3) {
+                Animal animal;
+                if (dados.length == 4) {
                     String nome = dados[0];
                     int idade = Integer.parseInt(dados[1]);
                     String cor = dados[2];
-                    Animal animal = new Animal(nome, idade, cor);
+                    if(dados[3] == "Cachorro"){
+                    animal = new Cachorro(nome, idade, cor); 
                     animaisCadastrados.add(animal);
+                    } else{
+                     animal = new Gato(nome, idade, cor); 
+                     animaisCadastrados.add(animal);
+                    }
+
                 }
             }
         } catch (IOException e) {
@@ -163,26 +170,3 @@ public class TelaAnimais extends JFrame {
     }
 }
 
-class Animal {
-    private String nome;
-    private int idade;
-    private String cor;
-
-    public Animal(String nome, int idade, String cor) {
-        this.nome = nome;
-        this.idade = idade;
-        this.cor = cor;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public int getIdade() {
-        return idade;
-    }
-
-    public String getCor() {
-        return cor;
-    }
-}
