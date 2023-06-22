@@ -11,7 +11,7 @@ public class Cachorro extends Animal {
     
     @Override
     public void emitirSom() {
-        System.out.println(this.getNome() + " espressa gratidão latindo com animação");
+        System.out.println(this.getNome() + " expressar gratidão latindo com animação");
         
     }
 
